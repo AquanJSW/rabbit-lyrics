@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rabbit Lyrics</title>
+    <link rel="icon" href="logo.a2fff80c.png">
+    <link href="docs.6ae8df02.css" rel="stylesheet">
+    <link href="prism.643d67ed.css" rel="stylesheet">
+    <script src="docs.63453e05.js" defer=""></script>
+    <script src="prism.ed106bb9.js" defer=""></script>
+  <link rel="stylesheet" href="docs.e03a6bae.css"></head>
+
+  <body>
+    <aside>
+      <ol>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#install">Install</a></li>
+        <li><a href="#initialize">Initialize</a></li>
+        <li><a href="#options">Options</a></li>
+        <li><a href="#examples">Examples</a></li>
+        <li><a href="https://github.com/guoyunhe/rabbit-lyrics">GitHub</a></li>
+      </ol>
+    </aside>
+
+    <main>
+      <h1 class="page-title">🐇 Rabbit Lyrics 🐇</h1>
+
+      <audio id="header-audio" controls="">
+        <source src="https://guoyunhe.me/wp-content/uploads/2015/03/hao-gan-win-win-wu-tiao-jian.ogg" type="audio/ogg">
+        <source src="https://guoyunhe.me/wp-content/uploads/2015/03/hao-gan-win-win-wu-tiao-jian.mp3" type="audio/mpeg">
+      </audio>
+      <form>
+        <label>
+          Lyrics
+          <select id="lyrics-select">
+            <option value="japanese" selected="">Japanese</option>
+            <option value="chinese">Chinese</option>
+            <option value="romaji">Romaji (Karaoke)</option>
+            <option value="combined">Combined</option>
+          </select>
+        </label>
+        <label>
+          Alignment
+          <select id="alignment-select">
+            <option value="center" selected="">Center</option>
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+          </select>
+        </label>
+        <label>
+          View Mode
+          <select id="viewmode-select">
+            <option value="clip" selected="">Clip</option>
+            <option value="full">Full</option>
+            <option value="mini">Mini</option>
+          </select>
+        </label>
+      </form>
+      <div id="header-lyrics" class="rabbit-lyrics"></div>
+
+      <h2 id="introduction"><a href="#introduction">💡 Introduction</a></h2>
+
+      <p>
+        <strong>Rabbit Lyrics</strong> is an audio and timed lyrics synchronizer
+        for web. No jQuery required. No dependencies.
+      </p>
+
+      <p>
+        Yes, here are already many similar things but Rabbit Lyrics has
+        something special:
+      </p>
+
+      <ol>
+        <li>
+          Highlight multiple lines at the same time. Especially useful when
+          adding translations.
+        </li>
+        <li>Do not depend on jQuery or any other libraries.</li>
+        <li>Predefined themes for different web design.</li>
+      </ol>
+
+      <p>
+        <a href="https://github.com/guoyunhe/rabbit-lyrics-wp">WordPress plugin</a>
+        is also available.
+      </p>
+
+      <h2 id="install"><a href="#install">📦 Install</a></h2>
+
+      <p>You can install through NPM:</p>
+
+      <pre><code class="language-bash">npm install rabbit-lyrics --save</code></pre>
+
+      <p>
+        Import it into your project using Webpack (require css-loader and
+        style-loader):
+      </p>
+
+      <pre><code class="language-js">import RabbitLyrics from 'rabbit-lyrics'</code></pre>
+
+      <p>Or link CDN version in HTML:</p>
+      <pre><code class="language-html">&lt;script src="https://unpkg.com/rabbit-lyrics" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
+
+      <h2 id="initialize"><a href="#initialize">🚀 Initialize</a></h2>
+
+      <h3 id="initialize-with-html">
+        <a href="#initialize-with-html">HTML</a>
+      </h3>
+
+      <p>
+        When using HTML markups to initialize lyrics, you must add class
+        <code>rabbit-lyrics</code> to the lyrics container.
+      </p>
+
+      <p>
+        Idealy, add <code>data-media</code> attribute to specify the selector of
+        audio or video element that you want to synchronize with lyrics. If
+        <code>data-media</code>
+        is not provided or element cannot be found, it will search first audio
+        or video element before lyrics container.
+      </p>
+
+      <pre><code class="language-html">&lt;audio id="audio-1" controls&gt;
+    &lt;source src="audio-1.ogg" type="audio/ogg"&gt;
+    &lt;source src="audio-1.mp3" type="audio/mpeg"&gt;
+&lt;/audio&gt;
+
+&lt;div class="rabbit-lyrics" data-media="#audio-1"&gt;
+[00:05.00] This is a little song
+[00:07.00] The song that nobody knows
+...
+&lt;/div&gt;</code></pre>
+
+      <h3 id="initialize-with-js">
+        <a href="#initialize-with-js">JavaScript</a>
+      </h3>
+
+      <p>
+        When using JavaScript to initialize lyrics, you must
+        <strong>NOT</strong> add <code>rabbit-lyrics</code> class to lyrics
+        container.
+      </p>
+
+      <p>
+        If <code>mediaElement</code> is not provided or element cannot be found,
+        it will search first audio or video element before lyrics container.
+      </p>
+
+      <pre><code class="language-html">&lt;audio id="audio-1" controls&gt;
+    &lt;source src="audio-1.ogg" type="audio/ogg"&gt;
+    &lt;source src="audio-1.mp3" type="audio/mpeg"&gt;
+&lt;/audio&gt;
+
+&lt;div id="lyrics-1"&gt;
+[00:05.00] This is a little song
+[00:07.00] The song that nobody knows
+...
+&lt;/div&gt;</code></pre>
+
+      <pre><code class="language-js">new RabbitLyrics({
+    element: document.findElementById('lyrics-1'),
+    mediaElement: document.findElementById('audio-1')
+})</code></pre>
+
+      <h2 id="options"><a href="#options">🎛️ Options</a></h2>
+
+      <h3 id="option-element"><a href="#option-element">element</a></h3>
+
+      <p>Type: <code>HTMLElement</code></p>
+
+      <p>The block element that contains lyrics.</p>
+
+      <h3 id="option-media-element">
+        <a href="#option-media-element">mediaElement</a>
+      </h3>
+
+      <p>Type: <code>HTMLMediaElement</code> (audio or video elements)</p>
+
+      <p>Default: the first audio or video element before</p>
+
+      <p>
+        HTML attribute: <code>data-media-element</code> (selector of media
+        element)
+      </p>
+
+      <h3 id="option-view-mode"><a href="#option-view-mode">viewMode</a></h3>
+
+      <p>Type: <code>string</code></p>
+
+      <p>Default: <code>'default'</code></p>
+
+      <p>HTML attribute: <code>data-view-mode</code></p>
+
+      <p>Available values:</p>
+
+      <ul>
+        <li><code>default</code></li>
+        <li><code>mini</code></li>
+        <li><code>full</code></li>
+      </ul>
+
+      <h2 id="examples"><a href="#examples">🎮 Examples</a></h2>
+
+      <h3 id="example-basic"><a href="#example-basic">Basic lyrics</a></h3>
+
+      <div class="example">
+        <audio id="audio-1" controls="">
+          <source src="https://guoyunhe.me/wp-content/uploads/2015/03/hao-gan-win-win-wu-tiao-jian.ogg" type="audio/ogg">
+          <source src="https://guoyunhe.me/wp-content/uploads/2015/03/hao-gan-win-win-wu-tiao-jian.mp3" type="audio/mpeg">
+        </audio>
+        <div class="rabbit-lyrics" data-media="#audio-1">{{japanese}}</div>
+      </div>
+
+      <h3 id="example-multiple-lines">
+        <a href="#example-multiple-lines">Multiple lines and translations</a>
+      </h3>
+
+      <p>
+        The following lyrics contains Japanese, Rōmaji and Chinese translation.
+        It highlights three lines at the same time.
+      </p>
+
+      <div class="example">
+        <audio id="audio-2" controls="">
+          <source src="https://guoyunhe.me/wp-content/uploads/2015/03/hao-gan-win-win-wu-tiao-jian.ogg" type="audio/ogg">
+          <source src="https://guoyunhe.me/wp-content/uploads/2015/03/hao-gan-win-win-wu-tiao-jian.mp3" type="audio/mpeg">
+        </audio>
+
+        <div class="rabbit-lyrics" data-media="#audio-2" data-alignment="center">
+          {{combined}}
+        </div>
+      </div>
+
+      <h3 id="example-karaoke">
+        <a href="#example-karaoke">Karaoke lyrics</a>
+      </h3>
+
+      <div class="example">
+        <audio id="audio-karaoke" controls="">
+          <source src="https://guoyunhe.me/wp-content/uploads/2015/03/hao-gan-win-win-wu-tiao-jian.ogg" type="audio/ogg">
+          <source src="https://guoyunhe.me/wp-content/uploads/2015/03/hao-gan-win-win-wu-tiao-jian.mp3" type="audio/mpeg">
+        </audio>
+
+        <div class="rabbit-lyrics" data-media="#audio-karaoke">{{romaji}}</div>
+      </div>
+
+      <h3 id="example-multiple-lyrics">
+        <a href="#example-multiple-lyrics">Multiple lyrics blocks</a>
+      </h3>
+
+      <p>
+        The following audio has two lyrics, one is in Japanese and the other is
+        in Chinese.
+      </p>
+
+      <div class="example">
+        <audio controls="">
+          <source src="https://guoyunhe.me/wp-content/uploads/2015/03/hao-gan-win-win-wu-tiao-jian.ogg" type="audio/ogg">
+          <source src="https://guoyunhe.me/wp-content/uploads/2015/03/hao-gan-win-win-wu-tiao-jian.mp3" type="audio/mpeg">
+        </audio>
+        <div class="grid">
+          <div class="rabbit-lyrics">{{japanese}}</div>
+          <div id="yooo" class="rabbit-lyrics">{{chinese}}</div>
+        </div>
+      </div>
+
+      <h3 id="example-mini-view-mode">
+        <a href="#example-mini-view-mode">Mini view mode</a>
+      </h3>
+
+      <div class="example">
+        <audio id="audio-4" controls="">
+          <source src="https://guoyunhe.me/wp-content/uploads/2015/03/hao-gan-win-win-wu-tiao-jian.ogg" type="audio/ogg">
+          <source src="https://guoyunhe.me/wp-content/uploads/2015/03/hao-gan-win-win-wu-tiao-jian.mp3" type="audio/mpeg">
+        </audio>
+
+        <div class="rabbit-lyrics" data-media="#audio-4" data-view-mode="mini">
+          {{japanese}}
+        </div>
+      </div>
+
+      <h3 id="example-full-view-mode">
+        <a href="#example-full-view-mode">Full view mode</a>
+      </h3>
+
+      <div class="example">
+        <audio id="audio-5" controls="">
+          <source src="https://guoyunhe.me/wp-content/uploads/2015/03/hao-gan-win-win-wu-tiao-jian.ogg" type="audio/ogg">
+          <source src="https://guoyunhe.me/wp-content/uploads/2015/03/hao-gan-win-win-wu-tiao-jian.mp3" type="audio/mpeg">
+        </audio>
+
+        <div class="rabbit-lyrics" data-media="#audio-5" data-view-mode="full">
+          {{japanese}}
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
